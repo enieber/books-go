@@ -15,24 +15,48 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/products": {
+        "/api/v1/books": {
+            "get": {
+                "description": "List books from database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "List all books",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.BookOutput"
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
-                "description": "Create Product",
+                "description": "Create book",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "books"
                 ],
-                "summary": "Create Product",
+                "summary": "Create book",
                 "parameters": [
                     {
-                        "description": "ProductInput to create",
+                        "description": "CreateBookInput to create",
                         "name": "createBook",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.ProductInput"
+                            "$ref": "#/definitions/models.CreateBookInput"
                         }
                     }
                 ],
@@ -40,92 +64,91 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ProductReturn"
+                            "$ref": "#/definitions/models.BookOutput"
                         }
                     }
                 }
             }
         },
-        "/api/v1/sales/buy": {
-            "post": {
-                "description": "Buy Product",
+        "/api/v1/books/{id}": {
+            "get": {
+                "description": "books from database",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
-                    "sales"
+                    "books"
                 ],
-                "summary": "Buy Product",
+                "summary": "find all books",
                 "parameters": [
                     {
-                        "description": "SalesInput to Buy",
-                        "name": "buyproduct",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.SalesInput"
-                        }
+                        "type": "integer",
+                        "description": "id of book",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.TransactionReturn"
+                            "$ref": "#/definitions/models.BookOutput"
                         }
                     }
                 }
-            }
-        },
-        "/api/v1/sales/payment": {
-            "put": {
-                "description": "update status of transaction when payment updated",
+            },
+            "delete": {
+                "description": "Deleted book",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
-                    "sales"
+                    "books"
                 ],
-                "summary": "Update Payment",
+                "summary": "Deleted book",
                 "parameters": [
                     {
-                        "description": "TransactionInput to update paymnentOk",
-                        "name": "transaction",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.TransactionInput"
-                        }
+                        "type": "integer",
+                        "description": "id of book",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.TransactionReturn"
+                            "type": "string"
                         }
                     }
                 }
-            }
-        },
-        "/api/v1/users": {
-            "post": {
-                "description": "Create User",
+            },
+            "patch": {
+                "description": "Update book",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "books"
                 ],
-                "summary": "Create User",
+                "summary": "Update book",
                 "parameters": [
                     {
-                        "description": "UserInput to create",
-                        "name": "createBook",
+                        "type": "integer",
+                        "description": "id of book",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "UpdateBookInput to create",
+                        "name": "UpdateBookInput",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.UserInput"
+                            "$ref": "#/definitions/models.UpdateBookInput"
                         }
                     }
                 ],
@@ -133,7 +156,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.UserReturn"
+                            "$ref": "#/definitions/models.BookOutput"
                         }
                     }
                 }
@@ -141,88 +164,42 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.ProductInput": {
+        "models.BookOutput": {
             "type": "object",
             "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.ProductReturn": {
-            "type": "object",
-            "properties": {
-                "externtal_id": {
+                "author": {
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
-                },
-                "name": {
                     "type": "string"
                 },
-                "type": {
+                "title": {
                     "type": "string"
                 }
             }
         },
-        "models.SalesInput": {
+        "models.CreateBookInput": {
             "type": "object",
+            "required": [
+                "author",
+                "title"
+            ],
             "properties": {
-                "id_product": {
-                    "type": "integer"
+                "author": {
+                    "type": "string"
                 },
-                "id_user": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.TransactionInput": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "status": {
+                "title": {
                     "type": "string"
                 }
             }
         },
-        "models.TransactionReturn": {
+        "models.UpdateBookInput": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.UserInput": {
-            "type": "object",
-            "properties": {
-                "email": {
+                "author": {
                     "type": "string"
                 },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.UserReturn": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
+                "title": {
                     "type": "string"
                 }
             }

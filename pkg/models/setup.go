@@ -17,12 +17,7 @@ func ConnectDatabase() {
 	}
 
 	err = database.Debug().AutoMigrate(
-		&User{},
-		&Product{},
-		&Sale{},
-		&Transaction{},
-		&Resource{},
-		&AcessResource{})
+		&Book{})
 	if err != nil {
 		panic("Failed to migration!")
 	}

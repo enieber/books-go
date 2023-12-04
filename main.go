@@ -1,13 +1,13 @@
 package main
 
 import (
-	"mag/pkg/controllers"
-	"mag/pkg/models"
+	"store/pkg/controllers"
+	"store/pkg/models"
 
-	_ "mag/docs"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "store/docs"
 )
 
 func main() {
@@ -17,10 +17,11 @@ func main() {
 
 	v1 := app.Group("/api/v1")
 	{
-		v1.POST("/products", controllers.CreateProduct)
-		v1.POST("/users", controllers.CreateUser)
-		v1.POST("/sales/buy", controllers.BuyProduct)
-		v1.PUT("/sales/payment", controllers.UpdateTransaction)
+		v1.GET("/books", controllers.FindBooks)
+		v1.GET("/books/:id", controllers.FindBook)
+		v1.POST("/books", controllers.CreateBook)
+		v1.PATCH("/books/:id", controllers.UpdateBook)
+		v1.DELETE("/books/:id", controllers.DeleteBook)
 		app.GET("/swagger/v1/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 

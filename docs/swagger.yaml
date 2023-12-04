@@ -1,140 +1,128 @@
 definitions:
-  models.ProductInput:
+  models.BookOutput:
     properties:
-      name:
-        type: string
-      type:
-        type: string
-    type: object
-  models.ProductReturn:
-    properties:
-      externtal_id:
+      author:
         type: string
       id:
-        type: integer
-      name:
         type: string
-      type:
+      title:
         type: string
     type: object
-  models.SalesInput:
+  models.CreateBookInput:
     properties:
-      id_product:
-        type: integer
-      id_user:
-        type: integer
+      author:
+        type: string
+      title:
+        type: string
+    required:
+    - author
+    - title
     type: object
-  models.TransactionInput:
+  models.UpdateBookInput:
     properties:
-      id:
-        type: integer
-      status:
+      author:
         type: string
-    type: object
-  models.TransactionReturn:
-    properties:
-      id:
-        type: integer
-      status:
-        type: string
-    type: object
-  models.UserInput:
-    properties:
-      email:
-        type: string
-      name:
-        type: string
-    type: object
-  models.UserReturn:
-    properties:
-      email:
-        type: string
-      id:
-        type: integer
-      name:
+      title:
         type: string
     type: object
 info:
   contact: {}
 paths:
-  /api/v1/products:
+  /api/v1/books:
+    get:
+      consumes:
+      - application/json
+      description: List books from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.BookOutput'
+            type: array
+      summary: List all books
+      tags:
+      - books
     post:
       consumes:
       - application/json
-      description: Create Product
+      description: Create book
       parameters:
-      - description: ProductInput to create
+      - description: CreateBookInput to create
         in: body
         name: createBook
         required: true
         schema:
-          $ref: '#/definitions/models.ProductInput'
+          $ref: '#/definitions/models.CreateBookInput'
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ProductReturn'
-      summary: Create Product
+            $ref: '#/definitions/models.BookOutput'
+      summary: Create book
       tags:
-      - products
-  /api/v1/sales/buy:
-    post:
+      - books
+  /api/v1/books/{id}:
+    delete:
       consumes:
       - application/json
-      description: Buy Product
+      description: Deleted book
       parameters:
-      - description: SalesInput to Buy
-        in: body
-        name: buyproduct
+      - description: id of book
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/models.SalesInput'
+        type: integer
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.TransactionReturn'
-      summary: Buy Product
+            type: string
+      summary: Deleted book
       tags:
-      - sales
-  /api/v1/sales/payment:
-    put:
+      - books
+    get:
       consumes:
       - application/json
-      description: update status of transaction when payment updated
+      description: books from database
       parameters:
-      - description: TransactionInput to update paymnentOk
-        in: body
-        name: transaction
+      - description: id of book
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/models.TransactionInput'
+        type: integer
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.TransactionReturn'
-      summary: Update Payment
+            $ref: '#/definitions/models.BookOutput'
+      summary: find all books
       tags:
-      - sales
-  /api/v1/users:
-    post:
+      - books
+    patch:
       consumes:
       - application/json
-      description: Create User
+      description: Update book
       parameters:
-      - description: UserInput to create
+      - description: id of book
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: UpdateBookInput to create
         in: body
-        name: createBook
+        name: UpdateBookInput
         required: true
         schema:
-          $ref: '#/definitions/models.UserInput'
+          $ref: '#/definitions/models.UpdateBookInput'
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.UserReturn'
-      summary: Create User
+            $ref: '#/definitions/models.BookOutput'
+      summary: Update book
       tags:
-      - users
+      - books
 swagger: "2.0"
