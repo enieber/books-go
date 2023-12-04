@@ -3,6 +3,8 @@
 Project to learn go lang
 
 
+![sagger image doc](/docs/swagger.png)
+
 ## How to run
 
 - install go 1.21
