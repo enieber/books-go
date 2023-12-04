@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"mag/models"
+	"mag/pkg/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"mag/controllers"
-	_ "mag/docs"
-	"mag/models"
+	"mag/pkg/controllers"
+	"mag/pkg/models"
 
+	_ "mag/docs"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
